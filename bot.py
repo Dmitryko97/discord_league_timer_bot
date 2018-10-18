@@ -7,6 +7,16 @@ client = discord.Client()
 spells = ['heal', 'ghost', 'barrier', 'exhaust', 'clarity', 'flash', 'teleport', 'cleanse', 'ignite']
 roles = ['top', 'jungle', 'mid', 'adc', 'support']
 
+bot_commands = [
+    'exit                       -   bot goes offline',
+    'start                      -   start game timer',
+    'end                        -   end game timer',
+    'time                       -   get current game time',
+    'start cd {role} {spell}    -   start cooldown for given spell for given role',
+    'get cd {role}              -   display when the spells are ready for given role',
+    'get all cd                 -   display cooldown when spells are ready for all roles'
+]
+
 
 def start_cd_checker(message):
     split = message.split(' ')
@@ -47,9 +57,15 @@ async def on_message(message):
     #print(f'{message.channel}: {message.author}: {message.author.name}: {message.content}')
     if not message.author.bot:
         
-        if 'exit' in message.content:
+        if 'exit' == message.content:
             await client.close()
 
+        elif 'help' == message.content:
+            info = 'Bot commands: \n\n'
+            for command in bot_commands:
+                info += f"{command}\n"
+            await message.channel.send(f"```{info}```")
+            
         elif 'start' == message.content:
             if game is None:
                 game = timer()
