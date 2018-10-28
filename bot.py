@@ -12,7 +12,7 @@ bot_commands = [
     'start                      -   start game timer',
     'end                        -   end game timer',
     'time                       -   get current game time',
-    'start cd {role} {spell}    -   start cooldown for given spell for given role',
+    'cd {role} {spell}          -   start cooldown for given spell for given role',
     'get cd {role}              -   display when the spells are ready for given role',
     'get all cd                 -   display cooldown when spells are ready for all roles'
 ]
@@ -21,17 +21,17 @@ bot_commands = [
 def start_cd_checker(message):
     split = message.split(' ')
     
-    if not(len(split) == 4):
+    if not(len(split) == 3):
         print(len(split))
         return None
-    elif roles.index(split[2]) == -1:
+    elif roles.index(split[1]) == -1:
+        print(split[1])
+        return None
+    elif spells.index(split[2]) == -1:
         print(split[2])
         return None
-    elif spells.index(split[3]) == -1:
-        print(split[3])
-        return None
     
-    return (split[2], split[3])
+    return (split[1], split[2])
 
 def get_cd_checker(message):
     split = message.split(' ')
@@ -83,7 +83,7 @@ async def on_message(message):
             else:
                 await message.channel.send("No active game")
 
-        elif message.content.startswith('start cd'):
+        elif message.content.startswith('cd'):
             try:
                 if game is not None:
                     role, spell = start_cd_checker(message.content)
